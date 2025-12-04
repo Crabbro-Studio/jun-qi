@@ -1,3 +1,12 @@
-[gd_scene format=3 uid="uid://dk616cn3bjpu6"]
+[gd_scene load_steps=2 format=3 uid="uid://dk616cn3bjpu6"]
+
+[ext_resource type="Script" uid="uid://pe48mik1itd7" path="res://GameManager.cs" id="1_ig7tw"]
 
 [node name="Main" type="Node"]
+script = ExtResource("1_ig7tw")
+
+[node name="Board" type="Node2D" parent="."]
+
+[node name="UIManager" type="CanvasLayer" parent="."]
+
+[node name="RuleCheckerInstance" type="Node" parent="."]
