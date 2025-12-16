@@ -1,32 +1,36 @@
-[gd_scene load_steps=2 format=3 uid="uid://dk616cn3bjpu6"]
+[gd_scene load_steps=3 format=3 uid="uid://dk616cn3bjpu6"]
 
 [ext_resource type="Script" uid="uid://pe48mik1itd7" path="res://GameManager.cs" id="1_ig7tw"]
+[ext_resource type="Script" uid="uid://8j0qa1gg4yta" path="res://BoardManager.cs" id="2_0xm2m"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_ig7tw")
 
-[node name="Board" type="Node2D" parent="."]
+[node name="GamePlayerLayer" type="Node2D" parent="."]
+
+[node name="Board" type="Node2D" parent="GamePlayerLayer"]
+script = ExtResource("2_0xm2m")
+
+[node name="Highlights" type="Node2D" parent="GamePlayerLayer"]
+
+[node name="PiecesContainer" type="Node2D" parent="GamePlayerLayer"]
 
 [node name="UIManager" type="CanvasLayer" parent="."]
 
-[node name="RuleCheckerInstance" type="Node" parent="."]
-
-[node name="AiPlayer" type="Node" parent="."]
-
-[node name="Piece" type="Node2D" parent="."]
-
-[node name="PiecesContainer" type="Node2D" parent="."]
-
-[node name="Highlights" type="Node2D" parent="."]
-
-[node name="MenuScreen" type="Control" parent="."]
+[node name="MenuScreen" type="Control" parent="UIManager"]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="TurnIndicator" type="Control" parent="."]
+[node name="TurnIndicator" type="Control" parent="UIManager"]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+
+[node name="Logic" type="Node" parent="."]
+
+[node name="RuleCheckerInstance" type="Node" parent="Logic"]
+
+[node name="AiPlayer" type="Node" parent="Logic"]
