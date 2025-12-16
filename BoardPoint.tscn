@@ -1,12 +1,21 @@
-[gd_scene load_steps=2 format=3 uid="uid://cucajmr0cdkri"]
+[gd_scene load_steps=4 format=3 uid="uid://cucajmr0cdkri"]
 
 [ext_resource type="Texture2D" uid="uid://d3pmsvo2hbx2j" path="res://icon.svg" id="1_v7hkt"]
+[ext_resource type="Script" uid="uid://dnolwl0bjd46k" path="res://BoardPoint.cs" id="2_151xh"]
 
-[node name="BoardPoint" type="Node2D"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_151xh"]
+radius = 34.0
+height = 126.0
+
+[node name="BoardPoint" type="Area2D"]
+script = ExtResource("2_151xh")
 
 [node name="BaseSprite" type="Sprite2D" parent="."]
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("1_v7hkt")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_151xh")
 
 [node name="DebugLabel" type="Label" parent="."]
 anchors_preset = 8

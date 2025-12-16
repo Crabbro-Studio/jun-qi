@@ -3,18 +3,18 @@ using System.Collections.Generic;
 
 public partial class BoardManager : Node2D
 {
-	[Export] public PackedScene PointScene; // 把上面的 BoardPoint.tscn 拖进来
+	[Export] public PackedScene PointScene; // 把 BoardPoint.tscn 拖进来
 	[Export] public Vector2 StartPosition = new Vector2(60, 100); // 棋盘在屏幕的起始位置
-	[Export] public Vector2 GridGap = new Vector2(70, 70);        // 格子间距
+	[Export] public Vector2 GridGap = new Vector2(80, 80);        // 格子间距
 
 	// 核心数据：通过坐标快速找到格子对象
-	public Dictionary<Vector2I, BoardPoint> GridMap { get; private set; } = new Dictionary<Vector2I, BoardPoint>();
-	
+	public Dictionary<Vector2I, BoardPoint> GridMap = new Dictionary<Vector2I, BoardPoint>();
+
 	public override void _Ready()
 	{
 		GenerateGrid();
 		ConnectGrid();
-		DrawDebugLines(); // 运行一次看看连接对不对，没问题后可以注释掉
+		DrawDebugLines(); // 调试完成后可注释掉
 	}
 
 	private void GenerateGrid()
@@ -24,23 +24,26 @@ public partial class BoardManager : Node2D
 		{
 			for (int x = 0; x < 5; x++)
 			{
-				// 实例化
+				// 1. 实例化
 				var point = PointScene.Instantiate<BoardPoint>();
-				AddChild(point); // 这里是作为 Board 的子节点
 
-				// 计算位置
+				// 2.【关键修改】先将节点加入场景树
+				// 这一步会立即触发 BoardPoint._Ready()，从而获取 Label 和 Sprite 节点引用
+				AddChild(point);
+
+				// 3. 计算位置
 				Vector2 pos = StartPosition + new Vector2(x * GridGap.X, y * GridGap.Y);
 				// 处理“山界” (第6行和第7行之间留空隙)
-				// 也就是 y >= 6 的行，整体往下移半个格子的距离
 				if (y >= 6) pos.Y += GridGap.Y * 0.5f;
 
 				point.Position = pos;
 
-				// 确定类型
+				// 4. 确定类型并初始化
+				// 此时 _debugLabel 已不再为空，可以安全调用 Initialize
 				BoardPoint.PointType type = DetermineType(x, y);
 				point.Initialize(x, y, type);
 
-				// 存入字典
+				// 5. 存入字典
 				GridMap[new Vector2I(x, y)] = point;
 			}
 		}
@@ -131,12 +134,16 @@ public partial class BoardManager : Node2D
 				if (p.Coordinate.X < n.Coordinate.X || (p.Coordinate.X == n.Coordinate.X && p.Coordinate.Y < n.Coordinate.Y))
 				{
 					Line2D line = new Line2D();
-					line.Points = new Vector2[] { p.Position, n.Position };
-					line.Width = 2.0f;
-					line.DefaultColor = new Color(0, 1, 0, 0.2f); // 绿色半透明
-					lineContainer.AddChild(line);
-				}
-			}
-		}
-	}
+					// 这里添加一个空判断，防止万一 Position 没准备好
+					if (p != null && n != null) 
+					{
+						line.Points = new Vector2[] { p.Position, n.Position };
+						line.Width = 2.0f;
+						line.DefaultColor = new Color(0, 1, 0, 0.2f); // 绿色半透明
+						lineContainer.AddChild(line);
+}
+}
+}
+}
+}
 }
